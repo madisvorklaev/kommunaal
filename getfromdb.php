@@ -1,6 +1,5 @@
 <?php
 $dataQuery = $_POST['chartData'];
-$asd = 'qwerty';
 if(empty($dataQuery))
 {
     echo("Vali vähemalt üks element.");
