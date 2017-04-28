@@ -1,5 +1,6 @@
 <?php
 $dataQuery = $_POST['chartData'];
+$sqlString = '';
 if(empty($dataQuery))
 {
     echo("Vali vähemalt üks element.");
@@ -10,18 +11,26 @@ else
     echo("Valisid $N elementi: ");
     for($i=0; $i < $N; $i++)
     {
-        echo($dataQuery[$i] . " ");
+       // echo($dataQuery[$i] . " ");
+        if($i == $N-1){
+            $sqlString .= $dataQuery[$i];
+        }
+        else{
+            $sqlString .= $dataQuery[$i] .',';
+        }
     }
 }
-
+print_r($sqlString);
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart)
+    </script>
 </head>
 
 <?php
@@ -30,41 +39,23 @@ $user = "test";
 $pass = "t3st3r123";
 $db = "test";
 $conn = mysqli_connect($host, $user, $pass, $db);
-// Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-$getvalues = "SELECT cold_water FROM 10163348_madisvorklaev WHERE 1";
-$result = mysqli_query($conn,$getvalues);
+$sqlQuery = "SELECT $sqlString FROM 10163348_madisvorklaev WHERE 1";
+$result = mysqli_query($conn,$sqlQuery);
 $array = array();
-//if ($result->num_rows > 0) {
-    // output data of each row
-    //while($row = $result->fetch_assoc()) {
     while($row = mysqli_fetch_array($result,MYSQLI_NUM)){
-  //  $row = mysqli_fetch_array($result,MYSQLI_NUM);
-//printf ("%s (%s)\n",$row[0],$row[1]);
         array_push($array, $row);
-       // $array[] = $row['cold_water'];
-      //  echo "<br>". $row["cold_water"] . "<br>";
-   // }
-//} else {
-  //  echo "0 results";
-
-}
+    }
 $js_array = json_encode($array);
-//print_r($array) ;
-echo 'JS' .$js_array;
+echo 'JS ' .$js_array;
 mysqli_close($conn);
-
 ?>
 <script type="text/javascript">
-
     var obj = <?php echo json_encode($array); ?>;
-
 for (i=0; i<obj.length; i++){
     console.log(obj[i]);
-}
-
     google.charts.load('current', {packages: ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
 
@@ -89,5 +80,32 @@ for (i=0; i<obj.length; i++){
         chart.draw(data, null);
     }
 </script>
+<script type="text/javascript">
+function drawChart() {
 
-<div id="myPieChart"/>
+// Create the data table.
+var data = new google.visualization.DataTable();
+data.addColumn('string', 'Topping');
+data.addColumn('number', 'Slices');
+data.addRows([
+['Mushrooms', 3],
+['Onions', 1],
+['Olives', 1],
+['Zucchini', 1],
+['Pepperoni', 2]
+]);
+
+// Set chart options
+var options = {'title':'How Much Pizza I Ate Last Night',
+'width':400,
+'height':300};
+
+// Instantiate and draw our chart, passing in some options.
+var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+chart.draw(data, options);
+}
+</script>
+<body>
+<div id="chart_div"/>
+</body>
+</html>
