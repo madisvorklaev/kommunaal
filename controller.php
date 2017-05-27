@@ -1,16 +1,23 @@
 <?php
 //$pics = array("nameless1.jpg","nameless2.jpg","nameless3.jpg","nameless4.jpg","nameless5.jpg","nameless6.jpg",);
-
-require_once('head.html');
+require_once('functions.php');
+session_start();
+connect_db();
+require_once('views/head.html');
 
 if (isset($_GET["page"])) $parameter = $_GET["page"];
 if (!empty($parameter))
     switch ($parameter) {
+        case "login":
+            login();
+            break;
+        case "logout":
+            logout();
         case 'sisesta':
-            include 'sendform.php';
+            include 'views/sendform.html';
             break;
         case 'kysi':
-            include 'getform.php';
+            include 'views/getform.html';
             break;
         case 'get':
             include 'getfromdb.php';
@@ -19,8 +26,9 @@ if (!empty($parameter))
             include 'db.php';
             break;
         default:
-            include 'pealeht.php';
+            include_once 'pealeht.php';
+            break;
     }
 else include 'pealeht.php';
-require_once('foot.html');
+require_once('views/foot.html');
 ?>

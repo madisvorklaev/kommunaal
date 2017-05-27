@@ -3,17 +3,22 @@
 <head>
     <meta charset="utf-8" />
     <title>PROJEKT</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="../kommunaalid/style.css">
 </head>
 <body>
 
 <div id="header">
     <ul>
         <li><a href="?page=pealeht">Pealeht</a></li>
+        <?php if(isset($_SESSION['user'])): ?>
         <li><a href="?page=sisesta">Sisesta andmeid</a></li>
         <li><a href="?page=kysi">Uuri andmeid</a></li>
+        <li><a href="?page=logout">Logi välja</a></li>
+        <?php else: ?>
+        <li><a href="?page=login">Logi sisse</a></li>
+        <?php endif; ?>
     </ul>
 </div>
 <div id="banner">
-    <img src="banner1.jpg" alt="banner">
+    <img src="../kommunaalid/images/banner1.jpg" alt="banner">
 </div>
