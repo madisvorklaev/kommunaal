@@ -1,11 +1,15 @@
+<?php
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == false) {
+header("Location: ?page=login");
+}?>
 <div id="wrap">
     <form name="readings" action="?page=set" method="post">
         <table>
-            <tr><td>Tarbimiskuu</td><td><input type="month" name="date" id="date" max= <?php echo date("Y-m");?> ></td></tr>
-            <tr><td>Külm vesi</td><td><input type="number" step="any" name="cold" id="cold"></td></tr>
-            <tr><td>Soe vesi</td><td><input type="number" step="any" name="hot" id="hot"></td></tr>
-            <tr><td>Öine elekter</td><td><input type="number" step="any" name="enight" id="enight"></td></tr>
-            <tr><td>Päevane elekter</td><td><input type="number" step="any" name="eday" id="eday"></td></tr>
+            <tr><td>Tarbimiskuu</td><td><input type="month" name="date" id="date" max= <?php echo date("Y-m");?> required></td></tr>
+            <tr><td>Külm vesi</td><td><input type="number" step="any" name="cold" id="cold" required></td></tr>
+            <tr><td>Soe vesi</td><td><input type="number" step="any" name="hot" id="hot" required></td></tr>
+            <tr><td>Öine elekter</td><td><input type="number" step="any" name="enight" id="enight" required></td></tr>
+            <tr><td>Päevane elekter</td><td><input type="number" step="any" name="eday" id="eday" required></td></tr>
         </table>
         <input type="submit" name="dataSubmit" value="Saada">
     </form>

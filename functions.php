@@ -62,27 +62,26 @@ function generateSqlString(){
     global $errors;
     $_SERVER['REQUEST_METHOD'] == 'POST';
     if (isset($_REQUEST['chartData'])){
-    $dataQuery = $_REQUEST['chartData'];
-    $dateQuery = $_REQUEST['dateData'];
-        $N = count($dataQuery);
-        $M = count($dateQuery);
-        for($i=0; $i < $N; $i++)
+    $dataQuery = $_REQUEST['chartData']; //chartData on array for future purposes. Mõte on ühel graafikul kuvada mitut kululiiki
+    $dateQuery = $_REQUEST['dateData']; //dateData[0] on startDate ja  dateData[1] on endDate
+
+        for($i=0; $i < count($dataQuery); $i++) //kuna chartData[] koosneb praegu ainult ühest väärtusest, pole seda põhimõtteliselt vaja, aga tuleviku mõistes on olemas
         {
-            if($i == $N-1){
+            if($i == count($dataQuery)-1){
                 $sqlString .= $dataQuery[$i];
             }
             else{
                 $sqlString .= $dataQuery[$i] .',';
             }
         }
-        if ($dateQuery[0]>0){
-            $dateStart = '"'.$dateQuery[0].'-01"';
+        if ($dateQuery[0]>0){ //kui alguskuupäev on määratud (YYYY-MM)
+            $dateStart = '"'.$dateQuery[0].'-01"'; //tee formaat YYYY-MM-DD SQLi jaoks
         }
         else $dateStart = "1000-01-01";
-        if ($dateQuery[1]>0){
-            $dateEnd = '"'.$dateQuery[1].'-01"';
+        if ($dateQuery[1]>0){ //kui lõpukuupäev on määratud (YYYY-MM)
+            $dateEnd = '"'.$dateQuery[1].'-01"'; //tee formaat YYYY-MM-DD SQLi jaoks
         }
-        else $dateEnd = '"'.date("Y-m-d").'"';
+        else $dateEnd = '"'.date("Y-m-d").'"'; //tänane kuupäev
 
 
     }
