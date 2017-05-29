@@ -7,10 +7,10 @@ header("Location: ?page=login");
         Andmed graafiku jaoks</br>
         Alates <input type="month" name="dateData[]" value = "2015-01" name="startDate"  /></br>
         Kuni&nbsp;&nbsp;&nbsp;&nbsp;<input type="month" name="dateData[]" value = <?php echo date("Y-m");?> name="endDate" max= <?php echo date("Y-m");?> /></br>
-        <input type="radio" name="chartData[]" value="cold_water" />Külm vesi</br>
-        <input type="radio" name="chartData[]" value="hot_water" />Soe vesi</br>
-        <input type="radio" name="chartData[]" value="electricity_night" />Öine elekter</br>
-        <input type="radio" name="chartData[]" value="electricity_day" />Päevane elekter</br>
+        <input type="radio" name="chartData" value="cold_water" />Külm vesi</br>
+        <input type="radio" name="chartData" value="hot_water" />Soe vesi</br>
+        <input type="radio" name="chartData" value="electricity_night" />Öine elekter</br>
+        <input type="radio" name="chartData" value="electricity_day" />Päevane elekter</br>
         <input type="submit" name="querySubmit" value="Saada päring" />
     </form>
 <!-- chartData on array for future purposes. Mõte on ühel graafikul kuvada mitut kululiiki -->

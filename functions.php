@@ -18,8 +18,8 @@ function login(){
         header("Location: ?page=kysi");
     }
     else if ($_SERVER['REQUEST_METHOD'] == 'POST'){ //https://www.w3schools.com/php/php_superglobals.asp
-        $user = mysqli_real_escape_string($connection, $_REQUEST['user']);
-        $pass = mysqli_real_escape_string($connection, $_REQUEST['pass']);
+        $user = mysqli_real_escape_string($connection, htmlspecialchars($_REQUEST['user']));
+        $pass = mysqli_real_escape_string($connection, htmlspecialchars($_REQUEST['pass']));
 
         if (empty($user)){
             $errors[]="Kasutajanimi on puudu";
@@ -56,15 +56,18 @@ function logout(){
 }
 
 function generateSqlString(){
+    global $connection;
     global $sqlString;
     global $dateStart;
     global $dateEnd;
     global $errors;
     $_SERVER['REQUEST_METHOD'] == 'POST';
     if (isset($_REQUEST['chartData'])){
-    $dataQuery = $_REQUEST['chartData']; //chartData on array for future purposes. Mõte on ühel graafikul kuvada mitut kululiiki
+    $dataQuery = htmlspecialchars($_REQUEST['chartData']);
     $dateQuery = $_REQUEST['dateData']; //dateData[0] on startDate ja  dateData[1] on endDate
+        $sqlString = mysqli_real_escape_string($connection, $dataQuery);
 
+/*                                              //chartData on array for future purposes. Mõte on ühel graafikul kuvada mitut kululiiki
         for($i=0; $i < count($dataQuery); $i++) //kuna chartData[] koosneb praegu ainult ühest väärtusest, pole seda põhimõtteliselt vaja, aga tuleviku mõistes on olemas
         {
             if($i == count($dataQuery)-1){
@@ -73,12 +76,12 @@ function generateSqlString(){
             else{
                 $sqlString .= $dataQuery[$i] .',';
             }
-        }
-        if ($dateQuery[0]>0){ //kui alguskuupäev on määratud (YYYY-MM)
+        } */
+        if ($dateQuery[0]>0){ //kui alguskuupäev on määratud (YYYY-MM). Võrdlus 0 vastu välistab ka stringi injectioni
             $dateStart = '"'.$dateQuery[0].'-01"'; //tee formaat YYYY-MM-DD SQLi jaoks
         }
         else $dateStart = "1000-01-01";
-        if ($dateQuery[1]>0){ //kui lõpukuupäev on määratud (YYYY-MM)
+        if ($dateQuery[1]>0){ //kui lõpukuupäev on määratud (YYYY-MM). Võrdlus 0 vastu välistab ka stringi injectioni
             $dateEnd = '"'.$dateQuery[1].'-01"'; //tee formaat YYYY-MM-DD SQLi jaoks
         }
         else $dateEnd = '"'.date("Y-m-d").'"'; //tänane kuupäev
